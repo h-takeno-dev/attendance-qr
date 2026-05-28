@@ -98,43 +98,34 @@ function startScan() {
 }
 
 function onScanSuccess(decodedText) {
-  console.log("読み取り成功:", decodedText);
 
-  // バイブ（対応デバイス）
-  if (navigator.vibrate) navigator.vibrate(200);
-
-  document.getElementById("status").innerText = "読み取り成功！";
-
-  html5QrCode.stop();
+  console.log("QR:", decodedText);
 
   try {
-    const url = new URL(decodedText);
-    const subjectId = url.searchParams.get("subjectId");
+    // ✅ QRのURL解析用
+    const qrUrl = new URL(decodedText);
+
+    const subjectId = qrUrl.searchParams.get("subjectId");
 
     if (!subjectId) {
-      document.getElementById("status").innerText = "QRエラー（subjectIdなし）";
+      alert("subjectIdが見つかりません");
       return;
     }
 
-    document.getElementById("status").innerText =
-      "出席登録中...";
+    // ✅ GAS送信用URL
+    let sendUrl = GAS_URL + "?subjectId=" + subjectId;
 
-    // ✅ GASへ遷移
-    let url = GAS_URL + "?subjectId=" + subjectId;
-    
-    // ✅ test引き継ぎ
+    // ✅ testモード引き継ぎ
     if (isTest) {
-      url += "&test=1";
+      sendUrl += "&test=1";
     }
-    
-    window.location.href = url;
+
+    window.location.href = sendUrl;
 
   } catch (e) {
-    document.getElementById("status").innerText =
-      "無効なQRコード";
+    alert("無効なQRコードです");
   }
 }
-
 function onScanFailure(error) {
   // 無視（ログだけ）
   console.log("読み取り中...");
