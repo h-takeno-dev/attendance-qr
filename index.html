@@ -76,6 +76,11 @@
 
 <br>
 
+<button onclick="goHistory()">
+  出席履歴を見る
+</button>
+
+<br><br>
 <footer style="font-size:12px">
   Copyright &copy; IWAKUNI Junior College. All Rights Reserved.
 </footer>
@@ -147,6 +152,18 @@ function onScanSuccess(decodedText) {
 
 function onScanFailure(error) {
   console.log("読み取り中...");
+}
+
+function goHistory() {
+
+  let url = GAS_URL + "?page=history";
+
+  // ✅ TESTモード引き継ぐ
+  if (isTest) {
+    url += "&test=1";
+  }
+
+  window.location.href = url;
 }
 </script>
 
