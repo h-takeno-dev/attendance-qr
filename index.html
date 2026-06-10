@@ -90,6 +90,16 @@ const GAS_URL = "https://script.google.com/a/macros/iwakuni.ac.jp/s/AKfycbxBk1oq
 
 let html5QrCode;
 
+
+// ✅ ★ここに追加（カメラ許可のウォームアップ）
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    stream.getTracks().forEach(track => track.stop());
+  })
+  .catch(err => {
+    console.log("カメラ許可が必要です");
+  });
+
 // ✅ TESTモード判定
 const params = new URLSearchParams(window.location.search);
 const isTest = params.get("test") === "1";
