@@ -186,33 +186,35 @@ function onScanSuccess(decodedText) {
   const sendUrl = GAS_URL + "?subjectId=" + subjectId;
 
   // ✅ GASは裏で呼ぶ
-  fetch(sendUrl)
-    .then(res => res.text())
-    .then(text => {
+fetch(sendUrl)
+  .then(res => res.json())
+  .then(data => {
 
-      // ✅ 判定
-      let title = "✅ 出席登録完了";
-      let message = "出席が正常に登録されました";
+    let title = "";
+    let message = data.message;
 
-      if (text.includes("すでに出席")) {
-        title = "✅ 登録済み";
-        message = "すでに登録されています";
-      }
+    if (data.status === "success") {
+      title = "✅ 出席登録完了";
+    } else if (data.status === "warning") {
+      title = "⏰ 登録時間外";
+    } else if (data.status === "info") {
+      title = "✅ 登録済み";
+    } else {
+      title = "⚠ エラー";
+    }
 
-      if (text.includes("時間外")) {
-        title = "⏰ 登録時間外";
-        message = "この時間は登録できません";
-      }
+    let extra = data.extra || "";
 
-      // ✅ GitHubで表示
-      window.location.href =
-        "result.html?title=" + encodeURIComponent(title) +
-        "&message=" + encodeURIComponent(message);
+    window.location.href =
+      "result.html?title=" + encodeURIComponent(title) +
+      "&message=" + encodeURIComponent(message) +
+      "&extra=" + encodeURIComponent(extra);
 
-    })
-    .catch(() => {
-      alert("通信エラー");
-    });
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("status").innerText = "通信エラー";
+  });
 }
 /*function onScanSuccess(decodedText) {
 
