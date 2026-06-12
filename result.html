@@ -62,34 +62,47 @@ button {
 
 <script>
 
+// ✅ URLパラメータ取得
 const params = new URLSearchParams(window.location.search);
 
-document.getElementById("name").innerText =
-  params.get("name");
+// ✅ 基本メッセージ
+document.getElementById("title").innerText =
+  params.get("title") || "";
 
-document.getElementById("subject").innerText =
-  params.get("subject");
+document.getElementById("message").innerText =
+  params.get("message") || "";
 
-document.getElementById("status").innerText =
-  "状態：" + params.get("status");
+// ✅ 追加情報（名前・科目・状態）
+const extra = params.get("extra");
 
+if (extra) {
+  const [name, subject, status] = extra.split("|");
+
+  document.getElementById("extra").innerHTML =
+    `<strong>${name}</strong><br>${subject}<br>状態：${status}`;
+}
+
+// ✅ 戻る処理（確実版）
 function goBack() {
   window.location.href = "./";
 }
 
 // ✅ カウントダウン
 let sec = 10;
+const countEl = document.getElementById("count");
 
 setInterval(() => {
   sec--;
+
   if (sec >= 0) {
-    document.getElementById("count").innerText =
-      sec + "秒後に戻ります";
+    countEl.innerText = sec + "秒後に戻ります";
   }
 }, 1000);
 
 // ✅ 自動戻り
-setTimeout(goBack, 10000);
+setTimeout(() => {
+  goBack();
+}, 10000);
 
 </script>
 
