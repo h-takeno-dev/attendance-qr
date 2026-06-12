@@ -141,7 +141,8 @@ function startScan() {
 
   html5QrCode.start(
     { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
+    //{ fps: 10, qrbox: 250 },
+    { fps: 10, qrbox: { width: 200, height: 200 } },
     onScanSuccess,
     onScanFailure
   );
