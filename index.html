@@ -2,6 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>出席登録</title>
 
   <!-- QRライブラリ -->
@@ -12,32 +14,37 @@
       font-family: sans-serif;
       text-align: center;
       background: #f4f6f8;
-      padding: 20px;
+      padding: 10px;
+      margin: 0;
     }
 
     h1 {
       color: #333;
-      margin-top: 40px;
+      margin-top: 20px;
+      font-size: 20px;
     }
 
     #reader {
-      width: 320px;
+      width: 100%;
+      max-width: 350px;
       margin: 20px auto;
     }
 
     #status {
       margin-top: 15px;
-      font-size: 18px;
+      font-size: 16px;
       color: green;
     }
 
     button {
-      padding: 12px 25px;
+      width: 90%;
+      max-width: 300px;
+      padding: 14px;
       font-size: 16px;
       background: #007bff;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
@@ -59,6 +66,22 @@
       text-align: center;
       z-index: 999;
     }
+
+    
+    /* ✅ スマホ専用微調整 */
+    @media (max-width: 480px) {
+
+      h1 {
+        font-size: 18px;
+      }
+
+      button {
+        font-size: 15px;
+        padding: 12px;
+      }
+
+    }
+
   </style>
 </head>
 
@@ -76,9 +99,11 @@
 
 <br>
 
+<div style="margin-top:20px;">
 <button onclick="goHistory()">
   出席履歴を見る
 </button>
+</div>
 
 <br><br>
 <footer style="font-size:12px">
