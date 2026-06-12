@@ -185,36 +185,8 @@ function onScanSuccess(decodedText) {
 
   const sendUrl = GAS_URL + "?subjectId=" + subjectId;
 
-  // ✅ GASは裏で呼ぶ
-fetch(sendUrl)
-  .then(res => res.json())
-  .then(data => {
-
-    let title = "";
-    let message = data.message;
-
-    if (data.status === "success") {
-      title = "✅ 出席登録完了";
-    } else if (data.status === "warning") {
-      title = "⏰ 登録時間外";
-    } else if (data.status === "info") {
-      title = "✅ 登録済み";
-    } else {
-      title = "⚠ エラー";
-    }
-
-    let extra = data.extra || "";
-
-    window.location.href =
-      "result.html?title=" + encodeURIComponent(title) +
-      "&message=" + encodeURIComponent(message) +
-      "&extra=" + encodeURIComponent(extra);
-
-  })
-  .catch(err => {
-    console.error(err);
-    document.getElementById("status").innerText = "通信エラー";
-  });
+  // ✅ ★これだけにする（最重要）
+    window.location.href = sendUrl;
 }
 /*function onScanSuccess(decodedText) {
 
