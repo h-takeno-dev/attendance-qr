@@ -269,7 +269,32 @@ function onScanSuccess(decodedText) {
       sendUrl += "&test=1";
     }
 
-    window.location.href = sendUrl;
+    fetch(sendUrl)
+      .then(res => res.text())
+      .then((text) => {
+    
+        // ここで結果を判定（簡易版）
+        let title = "✅ 出席登録完了";
+        let message = "出席が正常に登録されました";
+    
+        if (text.includes("すでに出席済み")) {
+          title = "✅ 登録済み";
+          message = "すでに登録されています";
+        }
+    
+        if (text.includes("時間外")) {
+          title = "⏰ 登録時間外";
+          message = "この時間は登録できません";
+        }
+    
+        window.location.href =
+          "result.html?title=" + encodeURIComponent(title) +
+          "&message=" + encodeURIComponent(message);
+    
+      })
+      .catch(() => {
+        alert("通信エラー");
+      });
 
   } catch (e) {
     document.getElementById("status").innerText = "❌ 無効なQRコード";
