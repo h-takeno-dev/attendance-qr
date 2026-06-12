@@ -95,6 +95,10 @@
 
 <div id="reader" style="display:none;"></div>
 
+<p id="guide" style="color:#555; font-size:14px;">
+  ［QRコードをカメラにかざしてください］
+</p>
+
 <p id="status"></p>
 
 <br>
@@ -111,6 +115,10 @@
 </footer>
 
 <script>
+const beep = new Audio(
+  "https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"
+);
+
 const GAS_URL = "https://script.google.com/a/macros/iwakuni.ac.jp/s/AKfycbxBk1oqNj-BfVSSEPDEREj2blrjhg7JhibThYjLEXY5QPOooEQ1aSRuyF88KXhhGYXT/exec";
 
 let html5QrCode;
@@ -134,7 +142,7 @@ if (isTest) {
   document.getElementById("testBanner").style.display = "block";
 }
 
-function startScan() {
+/*function startScan() {
   document.getElementById("reader").style.display = "block";
 
   html5QrCode = new Html5Qrcode("reader");
@@ -146,9 +154,26 @@ function startScan() {
     onScanSuccess,
     onScanFailure
   );
+}*/
+function startScan() {
+
+  document.getElementById("reader").style.display = "block";
+
+  // ✅ ガイド表示変更
+  document.getElementById("guide").innerText =
+    "QRコードを枠に合わせてください";
+
+  html5QrCode = new Html5Qrcode("reader");
+
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 200 },
+    onScanSuccess,
+    onScanFailure
+  );
 }
 
-function onScanSuccess(decodedText) {
+/*function onScanSuccess(decodedText) {
 
   console.log("読み取り:", decodedText);
 
@@ -183,6 +208,46 @@ function onScanSuccess(decodedText) {
 
   } catch (e) {
     document.getElementById("status").innerText = "無効なQRコード";
+  }
+}*/
+function onScanSuccess(decodedText) {
+
+  console.log("読み取り:", decodedText);
+
+  // ✅ 振動
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+  // ✅ 音
+  beep.play();
+
+  // ✅ 表示強化
+  document.getElementById("status").innerText = "✅ 読み取り成功！";
+  document.getElementById("guide").innerText = "処理中です...";
+
+  html5QrCode.stop();
+
+  try {
+    const parsedUrl = new URL(decodedText);
+    const subjectId = parsedUrl.searchParams.get("subjectId");
+
+    if (!subjectId) {
+      document.getElementById("status").innerText =
+        "❌ QRエラー（subjectIdなし）";
+      return;
+    }
+
+    document.getElementById("status").innerText = "⏳ 出席登録中...";
+
+    let sendUrl = GAS_URL + "?subjectId=" + subjectId;
+
+    if (isTest) {
+      sendUrl += "&test=1";
+    }
+
+    window.location.href = sendUrl;
+
+  } catch (e) {
+    document.getElementById("status").innerText = "❌ 無効なQRコード";
   }
 }
 
