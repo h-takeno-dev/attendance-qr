@@ -173,69 +173,48 @@ function startScan() {
   );
 }
 
-/*function onScanSuccess(decodedText) {
-
-  console.log("読み取り:", decodedText);
-
-  if (navigator.vibrate) navigator.vibrate(200);
-
-  document.getElementById("status").innerText = "読み取り成功！";
-
-  html5QrCode.stop();
-
-  try {
-    // ✅ 変数名変更（重要！）
-    const parsedUrl = new URL(decodedText);
-
-    const subjectId = parsedUrl.searchParams.get("subjectId");
-
-    if (!subjectId) {
-      document.getElementById("status").innerText = "QRエラー（subjectIdなし）";
-      return;
-    }
-
-    document.getElementById("status").innerText = "出席登録中...";
-
-    // ✅ GAS送信URL生成
-    let sendUrl = GAS_URL + "?subjectId=" + subjectId;
-
-    // ✅ TESTモード引き継ぎ
-    if (isTest) {
-      sendUrl += "&test=1";
-    }
-
-    fetch(sendUrl)
-      .then(res => res.text())
-      .then((text) => {
-    
-        // ここで結果を判定（簡易版）
-        let title = "✅ 出席登録完了";
-        let message = "出席が正常に登録されました";
-    
-        if (text.includes("すでに出席済み")) {
-          title = "✅ 登録済み";
-          message = "すでに登録されています";
-        }
-    
-        if (text.includes("時間外")) {
-          title = "⏰ 登録時間外";
-          message = "この時間は登録できません";
-        }
-    
-        window.location.href =
-          "result.html?title=" + encodeURIComponent(title) +
-          "&message=" + encodeURIComponent(message);
-    
-      })
-      .catch(() => {
-        alert("通信エラー");
-      });
-
-  } catch (e) {
-    document.getElementById("status").innerText = "無効なQRコード";
-  }
-}*/
 function onScanSuccess(decodedText) {
+
+  const parsedUrl = new URL(decodedText);
+  const subjectId = parsedUrl.searchParams.get("subjectId");
+
+  if (!subjectId) {
+    alert("QRエラー");
+    return;
+  }
+
+  const sendUrl = GAS_URL + "?subjectId=" + subjectId;
+
+  // ✅ GASは裏で呼ぶ
+  fetch(sendUrl)
+    .then(res => res.text())
+    .then(text => {
+
+      // ✅ 判定
+      let title = "✅ 出席登録完了";
+      let message = "出席が正常に登録されました";
+
+      if (text.includes("すでに出席")) {
+        title = "✅ 登録済み";
+        message = "すでに登録されています";
+      }
+
+      if (text.includes("時間外")) {
+        title = "⏰ 登録時間外";
+        message = "この時間は登録できません";
+      }
+
+      // ✅ GitHubで表示
+      window.location.href =
+        "result.html?title=" + encodeURIComponent(title) +
+        "&message=" + encodeURIComponent(message);
+
+    })
+    .catch(() => {
+      alert("通信エラー");
+    });
+}
+/*function onScanSuccess(decodedText) {
 
   console.log("読み取り:", decodedText);
 
@@ -299,7 +278,7 @@ function onScanSuccess(decodedText) {
   } catch (e) {
     document.getElementById("status").innerText = "❌ 無効なQRコード";
   }
-}
+}*/
 
 function onScanFailure(error) {
   console.log("読み取り中...");
