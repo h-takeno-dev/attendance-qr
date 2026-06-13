@@ -183,14 +183,19 @@ function onScanSuccess(decodedText) {
     return;
   }
 
-  let sendUrl = GAS_URL + "?subjectId=" + subjectId;
+  const sendUrl = GAS_URL + "?subjectId=" + subjectId;
 
-  if (isTest) {
-    sendUrl += "&test=1";
-  }
+  // ✅ ユーザーに見えるフィードバック
+  document.getElementById("status").innerText = "✅ 読み取り中...";
+  document.getElementById("guide").innerText = "出席登録しています";
 
-  // ✅ ★これだけにする（最重要）
+  // ✅ QR停止（重要！！）
+  html5QrCode.stop();
+
+  // ✅ 少し待ってから遷移（UX向上）
+  setTimeout(() => {
     window.location.href = sendUrl;
+  }, 300);
 }
 
 function onScanFailure(error) {
