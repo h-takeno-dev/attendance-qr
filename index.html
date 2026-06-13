@@ -189,6 +189,10 @@ function onScanSuccess(decodedText) {
   document.getElementById("status").innerText = "✅ 読み取り中...";
   document.getElementById("guide").innerText = "出席登録しています";
 
+  // ✅ 音・バイブ
+  if (navigator.vibrate) navigator.vibrate(100);
+  beep.play();
+  
   // ✅ QR停止（重要！！）
   html5QrCode.stop();
 
