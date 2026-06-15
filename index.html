@@ -87,7 +87,7 @@
 
 <body>
 
-<div id="testBanner">⚠ TESTモード動作中</div>
+<div id="testLabel" style="color:red; font-weight:bold;"></div>
 
 <h1>📷 授業出席＆退席</h1>
 
@@ -137,24 +137,22 @@ navigator.mediaDevices.getUserMedia({ video: true })
 const params = new URLSearchParams(window.location.search);
 const isTest = params.get("test") === "1";
 
-// ✅ TESTバナー表示
-if (isTest) {
-  document.getElementById("testBanner").style.display = "block";
-}
+// ✅ TEST表示（これを追加）
+window.addEventListener("DOMContentLoaded", function() {
 
-/*function startScan() {
-  document.getElementById("reader").style.display = "block";
+  if (isTest) {
 
-  html5QrCode = new Html5Qrcode("reader");
+    // 上部に表示
+    document.getElementById("testLabel").innerHTML = "🧪 TESTモード";
 
-  html5QrCode.start(
-    { facingMode: "environment" },
-    //{ fps: 10, qrbox: 250 },
-    { fps: 10, qrbox: { width: 200, height: 200 } },
-    onScanSuccess,
-    onScanFailure
-  );
-}*/
+    // 既存のバナーも表示（使うなら）
+    const banner = document.getElementById("testBanner");
+    if (banner) {
+      banner.style.display = "block";
+    }
+  }
+});
+
 function startScan() {
 
   document.getElementById("reader").style.display = "block";
