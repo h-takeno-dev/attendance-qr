@@ -104,10 +104,10 @@
 
 <br>
 
-<div style="margin-top:20px;">
-<button onclick="goHistory()">
-  出席履歴を見る
-</button>
+<div id="historyBtnArea" style="margin-top:20px;">
+  <button onclick="goHistory()">
+    出席履歴を見る
+  </button>
 </div>
 
 <br><br>
@@ -150,6 +150,12 @@ window.addEventListener("DOMContentLoaded", function() {
     const banner = document.getElementById("testBanner");
     if (banner) {
       banner.style.display = "block";
+    }
+
+    // ✅ ★ここ追加（履歴ボタン非表示）
+    const historyArea = document.getElementById("historyBtnArea");
+    if (historyArea) {
+      historyArea.style.display = "none";
     }
   }
 });
