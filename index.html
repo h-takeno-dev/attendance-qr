@@ -73,7 +73,7 @@
     @media (max-width: 480px) {
 
       h1 {
-        font-size: 18px;
+        font-size: 20px;
       }
 
       button {
@@ -193,15 +193,22 @@ window.addEventListener("DOMContentLoaded", function() {
 });
 
 function startScan() {
-  
-  // ✅ TESTモードのときは出さない
+
+  // ✅ TESTは除外
   if (!isTest) {
-    alert("まだログインしていない場合、ログイン画面が表示されます");
+
+    // ✅ まだ一度も表示していなければ出す
+    if (!sessionStorage.getItem("loginAlertShown")) {
+
+      alert("まだログインしていない場合、ログイン画面が表示されます");
+
+      // ✅ 一度表示した記録を残す
+      sessionStorage.setItem("loginAlertShown", "1");
+    }
   }
-  
+
   document.getElementById("reader").style.display = "block";
 
-  // ✅ ガイド表示変更
   document.getElementById("guide").innerText =
     "QRコードを枠に合わせてください";
 
