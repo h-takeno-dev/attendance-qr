@@ -259,6 +259,21 @@ function goHistory() {
 
   window.location.href = url;
 }
+
+// ✅ ★戻ったときに画面リセット
+window.addEventListener("pageshow", function() {
+
+  document.getElementById("status").innerText = "";
+
+  document.getElementById("guide").innerText =
+    "［QRコードをカメラにかざしてください］";
+
+  const reader = document.getElementById("reader");
+  if (reader) {
+    reader.style.display = "none";
+  }
+
+});
 </script>
 
 </body>
