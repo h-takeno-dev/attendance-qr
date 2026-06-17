@@ -260,13 +260,24 @@ function goHistory() {
   window.location.href = url;
 }
 
-// ✅ ★戻ったときに画面リセット
+// ✅ ★戻ったとき完全リセット（修正版）
 window.addEventListener("pageshow", function() {
 
-  document.getElementById("status").innerText = "";
+  // ✅ カメラ停止（ここが超重要）
+  if (typeof html5QrCode !== "undefined" && html5QrCode) {
+    try {
+      html5QrCode.stop().catch(() => {});
+    } catch (e) {}
+  }
 
-  document.getElementById("guide").innerText =
-    "［QRコードをカメラにかざしてください］";
+  // ✅ 表示リセット
+  const status = document.getElementById("status");
+  if (status) status.innerText = "";
+
+  const guide = document.getElementById("guide");
+  if (guide) {
+    guide.innerText = "［QRコードをカメラにかざしてください］";
+  }
 
   const reader = document.getElementById("reader");
   if (reader) {
