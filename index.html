@@ -137,7 +137,6 @@ const GAS_URL = "https://script.google.com/a/macros/iwakuni.ac.jp/s/AKfycbxBk1oq
 
 let html5QrCode;
 
-
 // ✅ ★ここに追加（カメラ許可のウォームアップ）
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => {
@@ -150,7 +149,6 @@ navigator.mediaDevices.getUserMedia({ video: true })
 // ✅ TESTモード判定
 const params = new URLSearchParams(window.location.search);
 const isTest = params.get("test") === "1";
-
 
 // ✅ ★ここ追加（学生用ログイントリガー）
 if (!isTest) {
@@ -184,11 +182,20 @@ window.addEventListener("DOMContentLoaded", function() {
     if (historyArea) {
       historyArea.style.display = "none";
     }
+
+    // ✅ ★これ追加
+    const loginGuide = document.getElementById("loginGuide");
+    if (loginGuide) {
+      loginGuide.style.display = "none";
+    }
+
   }
 });
 
 function startScan() {
 
+  alert("まだログインしていない場合、ログイン画面が表示されます");
+  
   document.getElementById("reader").style.display = "block";
 
   // ✅ ガイド表示変更
